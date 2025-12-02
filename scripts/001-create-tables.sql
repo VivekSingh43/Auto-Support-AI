@@ -132,3 +132,18 @@ CREATE INDEX IF NOT EXISTS idx_messages_conversation ON messages(conversation_id
 CREATE INDEX IF NOT EXISTS idx_tickets_workspace ON tickets(workspace_id);
 CREATE INDEX IF NOT EXISTS idx_tickets_status ON tickets(status);
 CREATE INDEX IF NOT EXISTS idx_workspace_members_user ON workspace_members(user_id);
+
+-- Create integrations table (whatsapp & instagram)
+CREATE TABLE IF NOT EXISTSworkspace_integrations (
+  id SERIAL PRIMARY KEY,
+  workspace_id INTEGER NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+  type TEXT NOT NULL CHECK (type IN ('whatsapp' & 'instagram')),
+  phone_number TEXT,
+  phone_number_id TEXT,
+  business_id TEXT,
+  page_id TEXT,
+  access_token TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_id TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE UNIQUE INDEX IF NOT EXISTS workspace_integrations_workspace_type_idx ON workspace_integrations (workspace_id, type);
